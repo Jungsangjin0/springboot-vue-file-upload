@@ -103,7 +103,21 @@ export default {
       // .catch((err) => { console.log(err) })
     },
     downloadTest (index, name) {
-      console.log(index, name)
+      axios.get(DEV_URL + '/v2/download/' + index, {responseType: 'blob'})
+        .then((res) => {
+          console.log(res)
+          console.log(this.files)
+          const url = window.URL.createObjectURL(new Blob([res.data], {type: this.files[index]['contentType']}))
+          const link = document.createElement('a')
+          link.href = url
+          if (this.files[index]['contentType'].includes('octet')) {
+            link.setAttribute('download', name + this.files[index]['ext'])
+          } else {
+            link.setAttribute('download', name)
+          }
+          document.body.appendChild(link)
+          link.click()
+        })
     }
   }
 

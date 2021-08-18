@@ -3,18 +3,24 @@ package com.example.demo.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.tomcat.util.buf.UriUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.Response;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @RestController
@@ -117,9 +123,15 @@ public class FileUploadController {
     }
 
     @GetMapping("/v2/download/{id}")
-    public ResponseEntity<Resource> downloadTest(@PathVariable int id) {
+    public ResponseEntity<Resource> downloadTest(@PathVariable int id) throws MalformedURLException {
+        UrlResource resource = new UrlResource("file:" + path + map.get(id).getSavedName());
 
-        return null;
+        String encodeUploadFileName = UriUtils.encode(map.get(id).getOriginName(), StandardCharsets.UTF_8);
+        String contentDisposition = "attachment; filename=\"" + encodeUploadFileName + "\"";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(resource);
     }
 
     @GetMapping("/getTest")
