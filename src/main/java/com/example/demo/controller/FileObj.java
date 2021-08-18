@@ -11,5 +11,6 @@ public class FileObj {
     private String originName;
     private String savedName;
     private String path;
-    private String contentTpye;
+    private String contentType;
+    private String ext;
 }
