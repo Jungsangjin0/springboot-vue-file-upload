@@ -6,7 +6,7 @@
           {{ file }} {{ index }}
          <!-- <img src="http://localhost:9090/download/" + {{index}}> -->
          <!-- <a href="#" @click="test(index, file['originName'])">{{ file['originName'] }}{{ file['ext'] }}</a> -->
-         <a href="#" @click="downloadTest(index, file['originName'])">{{ file['originName'] }}{{ file['ext'] }}</a>
+         <a href="#" @click.prevent="downloadTest(index, file['originName'])">{{ file['originName'] }}{{ file['ext'] }}</a>
         </div>
     </div>
 </template>
